@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Eventbus Bridge Session Example</title>
+
+  <meta name="viewport" content="initial-scale=1" />
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.1/angular-material.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+  
+    <!-- Angular Material Dependencies -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.10.1/angular-material.min.js"></script>
+  
+   <!-- vertx eventbus -->
+  <script src="//cdn.jsdelivr.net/sockjs/0.3.4/sockjs.min.js"></script>
+  <script src="lib/vertx3-eventbus-client/vertxbus.js"></script>
+    
+   <!-- app's js -->
+   <script src="js/app.js"></script>
+   <script src="js/services.js"></script>
+   <script src="js/controllers.js"></script>
+</head>
+
+<body ng-app="ebb-app" >
+    <div ng-controller="MainCtrl">
+    
+    <md-toolbar class="md-theme-light">
+        <h2 class="md-toolbar-tools">
+            <span>Showcase for eventbus bridge with websocket ticket</span>
+        </h2>
+    </md-toolbar>
+    <md-list>
+    <md-list-item class="md-2-line">
+        <div class="md-list-item-text">
+        <div layout="row">
+            <md-input-container>
+                <label>UserName</label>
+                <input type="text" ng-model="userName">
+            </md-input-container>
+            <md-input-container>
+                <md-button class="md-raised" ng-click="login()" ng-disabled="userName == ''">login</md-button>
+            </md-input-container>
+            </div>
+            <div>
+                <div class="md-body-1" ng-hide="sessionId == ''">Hi {{userName}}! Your session id is {{sessionId}}</div>
+            </div>
+        </div>
+    </md-list-item>
+    <md-divider></md-divider>
+    
+    <md-list-item class="md-2-line">
+        <div class="md-list-item-text">
+    <div layout="row">
+        <md-input-container>
+            <md-button class="md-raised" ng-click="ping()">send ping via REST</md-button>
+        </md-input-container>
+    </div>
+    <div class="md-body-1">ping response:  {{pingResponse}}</div>
+        </div>
+    </md-list-item>
+    
+    <md-divider></md-divider>
+
+    <md-list-item class="md-2-line">
+        <div class="md-list-item-text">
+    <div layout="row">
+        <md-input-container>
+            <md-button ng-disabled="sessionId == ''" class="md-raised" ng-click="startEb()">start eventbus</md-button>
+        </md-input-container>
+    </div>
+    <div class="md-body-1">event bus status: {{eventbusStatus}}</div>
+        </div>
+    </md-list-item>
+
+    <md-divider></md-divider>
+    
+    <md-list-item class="md-2-line">
+    <div class="md-list-item-text">
+    <div layout="row">
+        <md-input-container>
+             <label>eventbus message</label>
+            <input type="text" ng-model="message">
+        </md-input-container>
+        <md-input-container>
+            <md-button ng-disabled="eventbusStatus!='started'" class="md-raised" ng-click="sendMessage()">send message</md-button>
+        </md-input-container>
+    </div>
+    <div class="md-body-1">reply message:{{replyMessage}}</div>
+    </div>
+    </md-list-item>
+
+    <md-divider></md-divider>
+    
+    <md-list-item class="md-2-line">
+    <div class="md-list-item-text">
+    <div layout="row">
+        <md-input-container>
+            <md-button  ng-disabled="eventbusStatus!='started'" class="md-raised" ng-click="registerHandler()">register handler</md-button>
+        </md-input-container>
+    </div>
+    <div class="md-body-1">received message: {{receivedMessage}}</div>
+    </div>
+    </md-list-item>
+
+    </md-list>
+</div>
+</body>
+</html>

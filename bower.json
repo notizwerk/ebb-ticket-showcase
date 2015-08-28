@@ -1,0 +1,27 @@
+{
+  "name": "ebb-session-usecase",
+  "version": "1.0.0",
+  "description": "example for using vert-x3 eventbus bridge with session id",
+  "main": "index.html",
+  "keywords": [
+    "vertx",
+    "vert-x3",
+    "vert.x3",
+    "eventbusbridge"
+  ],
+  "authors": [
+    "Tarek El-Sibay"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/sibay",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+
+  }
+}
