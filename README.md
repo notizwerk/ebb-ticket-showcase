@@ -9,6 +9,7 @@ Here  a user logs in via a standard HTTP(S) request and receives a session id. T
 
 ```BASH
 git clone https://github.com/sibay/ebb-ticket-showcase.git
+cd ebb-ticket-showcase/
 ./gradlew execute
 ```
 
