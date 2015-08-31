@@ -50,7 +50,7 @@ public class TicketEventbusBridge {
 				.addInboundPermitted(registerPermission)
 				.addOutboundPermitted(registerPermission);
 
-		sockJSHandler.bridge(options, TokenizedBridgeEventHandler.create((BridgeEvent event,String ticket) -> {
+		sockJSHandler.bridge(options, TokenizedBridgeEventHandler.create((BridgeEvent event,String authToken) -> {
 			SockJSSocket socket = event.socket();
 			// Using the session id would rely on Cookies (in some cases the session id is transported in a Cookie)
 			// what opens some security issues. see https://github.com/sockjs/sockjs-node
@@ -65,8 +65,8 @@ public class TicketEventbusBridge {
 				case REGISTER:
 				case SEND:
 				case PUBLISH:
-					System.out.println("bridge event of type "+event.type()+" with ticket "+ticket);
-					checkTicket(ticket, event,(Session session)->{
+					System.out.println("bridge event of type "+event.type()+" with auth token "+authToken);
+					checkToken(authToken, event,(Session session)->{
 						System.out.println("found user in session:"+session.get("user").toString());
 						event.complete(true);
 					});
@@ -85,24 +85,24 @@ public class TicketEventbusBridge {
 		return router;
 	}
 	
-	private void checkTicket(String ticket, BridgeEvent event, Handler<Session> successHandler) {
-		if( ticket == null || "".equals(ticket)) {
+	private void checkToken(String authToken, BridgeEvent event, Handler<Session> successHandler) {
+		if( authToken == null || "".equals(authToken)) {
 			event.complete(false);
 		}
-		// use the ticket as key to the user session
-		this.sessionStore.get(ticket, (AsyncResult<Session> asyncSession) -> {
+		// use the authToken as key to the user session
+		this.sessionStore.get(authToken, (AsyncResult<Session> asyncSession) -> {
 			if (asyncSession.failed()) {
-				System.out.println("cannot get session with id " + ticket + " from sessionStore: " + asyncSession.cause().getMessage());
+				System.out.println("cannot get session with id " + authToken + " from sessionStore: " + asyncSession.cause().getMessage());
 				event.complete(false);
 			} else {
 				Session session = asyncSession.result();
 				if ( session.isDestroyed() ) {
-					System.out.println("session with id " + ticket + " is destroyed");
+					System.out.println("session with id " + authToken + " is destroyed");
 					event.complete(false);
 				} else {
 					JsonObject userData = session.get("user");
 					if ( userData == null ) {
-						System.out.println("session with id " + ticket + " contains no user data ");
+						System.out.println("session with id " + authToken + " contains no user data ");
 						event.complete(false);
 					} else {
 						successHandler.handle(session);
