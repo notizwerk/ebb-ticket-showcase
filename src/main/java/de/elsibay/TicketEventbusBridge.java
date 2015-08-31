@@ -50,7 +50,7 @@ public class TicketEventbusBridge {
 				.addInboundPermitted(registerPermission)
 				.addOutboundPermitted(registerPermission);
 
-		sockJSHandler.bridge(options,(BridgeEvent event)->{
+		sockJSHandler.bridge(options, TokenizedBridgeEventHandler.create((BridgeEvent event,String ticket) -> {
 			SockJSSocket socket = event.socket();
 			// Using the session id would rely on Cookies (in some cases the session id is transported in a Cookie)
 			// what opens some security issues. see https://github.com/sockjs/sockjs-node
@@ -65,7 +65,6 @@ public class TicketEventbusBridge {
 				case REGISTER:
 				case SEND:
 				case PUBLISH:
-					String ticket = event.rawMessage().getString("ticket");
 					System.out.println("bridge event of type "+event.type()+" with ticket "+ticket);
 					checkTicket(ticket, event,(Session session)->{
 						System.out.println("found user in session:"+session.get("user").toString());
@@ -81,7 +80,7 @@ public class TicketEventbusBridge {
 				default:
 					event.complete(false);
 			}
-		});
+		}));
 		router.route("/*").handler(sockJSHandler);		
 		return router;
 	}
