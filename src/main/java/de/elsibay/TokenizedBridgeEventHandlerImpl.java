@@ -24,7 +24,10 @@ public class TokenizedBridgeEventHandlerImpl implements TokenizedBridgeEventHand
 		
 		@Override
 		public void handle(BridgeEvent event) {
-			String token = event.rawMessage().getString(tokenName);
+			String token = null;
+			if ( event.rawMessage() != null) {
+				token = event.rawMessage().getString(tokenName);
+			}
 			bridgeEventAuthTokenHandler.accept(event, token);
 		}
 		
