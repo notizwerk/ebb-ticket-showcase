@@ -42,8 +42,8 @@ angular.module('app.services',[])
     }).service('eventBusService', function (BACKEND) {
     
         this.eb = undefined;
-        this.start = function (ticket,onOpen,onClose,onError) {
-            this.eb = new vertx.EventBus("http://"+BACKEND+"/eventbus",{ticket:ticket});
+        this.start = function (authorization,onOpen,onClose,onError) {
+            this.eb = new vertx.EventBus("http://"+BACKEND+"/eventbus",{authorization:authorization});
             this.eb.onopen = onOpen;
             this.eb.onclose = function () {
                 console.log("eventbus closed");

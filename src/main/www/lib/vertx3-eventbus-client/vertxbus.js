@@ -53,10 +53,10 @@ var vertx = vertx || {};
     var state = vertx.EventBus.CONNECTING;
     var pingTimerID = null;
     var pingInterval = null;
-    var ticket = null;
+    var authorization = null;
     if (options) {
       pingInterval = options['vertxbus_ping_interval'];
-      ticket = options['ticket'];
+      authorization = options['authorization'];
     }
     if (!pingInterval) {
       pingInterval = 5000;
@@ -137,8 +137,8 @@ var vertx = vertx || {};
           type: 'register',
           address: address
         };
-        if ( ticket != null ) {
-            msg['ticket'] = ticket;
+        if ( authorization != null ) {
+            msg['authorization'] = authorization;
         }
         sockJSConn.send(JSON.stringify(msg));
       } else {
@@ -161,8 +161,8 @@ var vertx = vertx || {};
             type: 'unregister',
             address: address
           };
-          if ( ticket != null ) {
-            msg['ticket'] = ticket;
+          if ( authorization != null ) {
+            msg['authorization'] = authorization;
           }
 
           sockJSConn.send(JSON.stringify(msg));
@@ -266,8 +266,8 @@ var vertx = vertx || {};
         address: address,
         body: message
       };
-      if ( ticket != null ) {
-        envelope['ticket'] = ticket;
+      if ( authorization != null ) {
+        envelope['authorization'] = authorization;
       }
 
       if (headers) {
