@@ -60,6 +60,8 @@ public class TicketEventbusBridge {
 			// Use a ticket/sessionId/token send on the socket instead.
 			switch (event.type()) {
 				case SOCKET_CREATED:
+				case SOCKET_CLOSED:
+					// no rawMessage at all
 					event.complete(true);
 					break;
 				case REGISTER:
