@@ -43,7 +43,8 @@ angular.module('app.services',[])
     
         this.eb = undefined;
         this.start = function (authorization,onOpen,onClose,onError) {
-            this.eb = new vertx.EventBus("http://"+BACKEND+"/eventbus",{authorization:authorization});
+            this.eb = new EventBus("http://"+BACKEND+"/eventbus");
+            this.eb.defaultHeaders = {'authorization':authorization};
             this.eb.onopen = onOpen;
             this.eb.onclose = function () {
                 console.log("eventbus closed");

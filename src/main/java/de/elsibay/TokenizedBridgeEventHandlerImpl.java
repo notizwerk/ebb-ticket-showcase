@@ -15,6 +15,7 @@
  */
 package de.elsibay;
 
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.handler.sockjs.BridgeEvent;
 import java.util.function.BiConsumer;
 
@@ -35,7 +36,10 @@ public class TokenizedBridgeEventHandlerImpl implements TokenizedBridgeEventHand
 		public void handle(BridgeEvent event) {
 			String token = null;
 			if ( event.rawMessage() != null) {
-				token = event.rawMessage().getString(tokenName);
+				JsonObject headers = event.rawMessage().getJsonObject("headers");
+				if ( headers!= null ) {
+					token = headers.getString(tokenName,"");
+				}
 			}
 			bridgeEventAuthTokenHandler.accept(event, token);
 		}

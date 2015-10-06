@@ -38,7 +38,7 @@ angular.module('app.controllers', [])
         $scope.replyMessage = "";
         $scope.message = "";
         $scope.sendMessage = function() {
-          $scope.eventbus.send("ping", { action: "send me a pong", text:$scope.message } , function(msg) {
+          $scope.eventbus.send("ping", { action: "send me a pong", text:$scope.message } , function(err,msg) {
             console.log("received reply message:", msg);
               $scope.$apply(function() {
                   $scope.replyMessage = JSON.stringify(msg);
@@ -47,7 +47,7 @@ angular.module('app.controllers', [])
         };
         
         $scope.registerHandler = function() {
-            $scope.eventbus.registerHandler("topic", function (msg) {
+            $scope.eventbus.registerHandler("topic", function (err,msg) {
                 console.log("received a message:", msg);
                 $scope.$apply(function() {
                     $scope.receivedMessage =JSON.stringify(msg);
